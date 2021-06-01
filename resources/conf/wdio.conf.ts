@@ -45,7 +45,7 @@ export const config = {
     ui: 'bdd',
     timeout: 60000
   },
-  afterTest: function (_test: any, _context: any, { error }: any) {
+  afterTest: function (_test: Record<string, unknown>, _context: Record<string, unknown>, { error }: Record<string, unknown>): void {
     if (error) {
       browser.takeScreenshot();
     }

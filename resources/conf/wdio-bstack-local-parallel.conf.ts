@@ -1,6 +1,7 @@
 import { config as defaultConfig } from './wdio.conf';
 import * as _ from 'lodash';
 import { Local } from 'browserstack-local';
+import * as parseArgs from 'minimist';
 
 const timeStamp = new Date().getTime();
 const bs_local = new Local();
@@ -36,31 +37,31 @@ const overrides = {
     browserName: 'Chrome',
     browser_version: "latest",
     acceptInsecureCerts: true,
-    name: (require('minimist')(process.argv.slice(2)))['bstack-session-name'] || 'default_name',
+    name: (parseArgs(process.argv.slice(2)))['bstack-session-name'] || 'default_name',
     build: process.env.BROWSERSTACK_BUILD_NAME || 'browserstack-examples-webdriverio' + " - " + new Date().getTime()
   }],
-  onPrepare: function (_config: any, _capabilities: any) {
+  onPrepare: function () {
     console.log("Connecting local");
     return new Promise<void>(function (resolve, reject) {
-      bs_local.start({ 'key': config.key, 'localIdentifier': `${timeStamp}` }, function (error: any) {
+      bs_local.start({ 'key': config.key, 'localIdentifier': `${timeStamp}` }, function (error: unknown) {
         if (error) return reject(error);
         console.log('Connected. Now testing...');
         resolve();
       });
     });
   },
-  onComplete: function (_capabilties: any, _specs: any) {
-    return new Promise<void>(function (resolve, _reject) {
+  onComplete: function () {
+    return new Promise<void>(function (resolve) {
       bs_local.stop(function () {
         console.log("Binary stopped");
         resolve();
       });
     });
   },
-  afterTest: function (test: any, context: any, { error, result, duration, passed, retries }: any) {
-    if ((require('minimist')(process.argv.slice(2)))['bstack-session-name']) {
+  afterTest: function (test: Record<string, unknown>, context: Record<string, unknown>, { passed }: Record<string, unknown>) {
+    if ((parseArgs(process.argv.slice(2)))['bstack-session-name']) {
       browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" +
-        (require('minimist')(process.argv.slice(2)))['bstack-session-name'] + "\" }}");
+        (parseArgs(process.argv.slice(2)))['bstack-session-name'] + "\" }}");
     } else {
       browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + test.title + "\" }}");
     }
@@ -76,6 +77,6 @@ const overrides = {
 
 export const config = _.defaultsDeep(overrides, defaultConfig);
 
-config.capabilities.forEach(function (caps: { [x: string]: any; }) {
-  for (var i in config.commonCapabilities) caps[i] = caps[i] || config.commonCapabilities[i];
+config.capabilities.forEach(function (caps: { [x: string]: unknown; }) {
+  for (const i in config.commonCapabilities) caps[i] = caps[i] || config.commonCapabilities[i];
 });

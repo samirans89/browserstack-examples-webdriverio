@@ -1,5 +1,6 @@
 import { config as defaultConfig } from './wdio.conf';
 import * as _ from 'lodash';
+import * as parseArgs from 'minimist';
 
 const overrides = {
   user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
@@ -19,7 +20,7 @@ const overrides = {
     'browserstack.video': true,
     'browserstack.networkLogs': true,
     acceptInsecureCerts: true,
-    name: (require('minimist')(process.argv.slice(2)))['bstack-session-name'] || 'default_name',
+    name: (parseArgs(process.argv.slice(2)))['bstack-session-name'] || 'default_name',
     build: process.env.BROWSERSTACK_BUILD_NAME || 'browserstack-examples-webdriverio' + " - " + new Date().getTime()
   },
   capabilities: [{
@@ -43,10 +44,10 @@ const overrides = {
     real_mobile: "true",
     browserName: 'iPhone',
   }],
-  afterTest: function (_test: any, _context: any, { error, result, duration, passed, retries }: any) {
-    if ((require('minimist')(process.argv.slice(2)))['bstack-session-name']) {
+  afterTest: function (_test: Record<string, unknown>, _context: Record<string, unknown>, { passed }: Record<string, unknown>) {
+    if ((parseArgs(process.argv.slice(2)))['bstack-session-name']) {
       browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" +
-        (require('minimist')(process.argv.slice(2)))['bstack-session-name'] + "\" }}");
+        (parseArgs(process.argv.slice(2)))['bstack-session-name'] + "\" }}");
     } else {
       browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + _test.title + "\" }}");
     }
@@ -62,6 +63,6 @@ const overrides = {
 
 export const config = _.defaultsDeep(overrides, defaultConfig);
 
-config.capabilities.forEach(function (caps: { [x: string]: any; }) {
-  for (var i in config.commonCapabilities) caps[i] = caps[i] || config.commonCapabilities[i];
+config.capabilities.forEach(function (caps: { [x: string]: unknown; }) {
+  for (const i in config.commonCapabilities) caps[i] = caps[i] || config.commonCapabilities[i];
 });
