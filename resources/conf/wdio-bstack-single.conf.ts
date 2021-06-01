@@ -22,7 +22,7 @@ const overrides = {
     name: (require('minimist')(process.argv.slice(2)))['bstack-session-name'] || 'default_name',
     build: process.env.BROWSERSTACK_BUILD_NAME || 'browserstack-examples-webdriverio' + " - " + new Date().getTime()
   }],
-  afterTest: function (test: { title: string; }, context: any, { error, result, duration, passed, retries }: any) {
+  afterTest: function (test: { title: string; }, context: any, { passed }: any) {
     if ((require('minimist')(process.argv.slice(2)))['bstack-session-name']) {
       browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" +
         (require('minimist')(process.argv.slice(2)))['bstack-session-name'] + "\" }}");
