@@ -63,6 +63,7 @@ node {
         stage('Generate Reports') {
             browserStackReportPublisher 'automate'
             sh label: '', returnStatus: true, script: '''#!/bin/bash -l
+                                                                cd test
                                                                 npm run generateMochawesome
                                                                 '''
             archiveArtifacts artifacts: 'mochawesome-report/**/*.*', caseSensitive: false, defaultExcludes: false, onlyIfSuccessful: true
