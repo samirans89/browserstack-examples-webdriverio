@@ -21,3 +21,12 @@ steps:
     npm run bstack-parallel
     npx allure generate allure-results --clean
   displayName: 'npm install and build'
+
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
