@@ -15,6 +15,10 @@ steps:
     versionSpec: '14.x'
   displayName: 'Install Node.js'
 
+- task: BrowserStackConfig@0
+  inputs:
+    BrowserStackServiceEndPoint: 'BStack Demo Account'
+
 - script: |
     node -v
     npm install
@@ -26,3 +30,5 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'junit-results/results-*.xml'
+
+- task: BrowserStackResults@0
