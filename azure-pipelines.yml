@@ -15,18 +15,20 @@ steps:
     versionSpec: '14.x'
   displayName: 'Install Node.js'
 
+- task: BrowserStackConfig@0
+  inputs:
+    BrowserStackServiceEndPoint: 'BStack Demo Account'
+
 - script: |
     node -v
     npm install
-    npm run bstack-parallel
+    npm run bstack-parallel-browsers
     npx allure generate allure-results --clean
   displayName: 'npm install and build'
 
-- task: VSTest@2
+- task: PublishTestResults@2
   inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\*test*.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'junit-results/results-*.xml'
+
+- task: BrowserStackResults@0
