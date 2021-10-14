@@ -42,6 +42,11 @@ exports.config = {
           // optional
           return `results-${options.cid}.xml`;
         },
+        errorOptions: {
+          error: "message",
+          failure: "message",
+          stacktrace: "stack",
+        },
       },
     ],
   ],
