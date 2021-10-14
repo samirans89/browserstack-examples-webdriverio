@@ -22,7 +22,7 @@ steps:
 - script: |
     node -v
     npm install
-    npm run bstack-parallel
+    npm run bstack-parallel-browsers
     npx allure generate allure-results --clean
   displayName: 'npm install and build'
 
