@@ -12,8 +12,8 @@ var overrides = {
     './src/test/suites/user/*.js'
   ],
   hostname: 'hub.browserstack.com',
+  maxInstances: 25,
   commonCapabilities: {
-    maxInstances: 1,
     'browserstack.maskCommands':'setValues, getValues, setCookies, getCookies',
     'browserstack.debug': true,
     'browserstack.video': true,
