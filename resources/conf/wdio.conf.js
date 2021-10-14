@@ -1,44 +1,62 @@
-var fs = require('fs');
-const accounts = require('../data/user.json')
+var fs = require("fs");
+const accounts = require("../data/user.json");
 
 exports.config = {
   accounts: accounts,
-  runner: 'local',
-  specs: [
-    ''
+  runner: "local",
+  specs: [""],
+  capabilities: [
+    {
+      maxInstances: 1,
+      browserName: "chrome",
+      acceptInsecureCerts: true,
+    },
   ],
-  capabilities: [{
-    maxInstances: 1,
-    browserName: 'chrome',
-    acceptInsecureCerts: true
-  }],
-  logLevel: 'warn',
+  logLevel: "warn",
   coloredLogs: true,
   bail: 0,
-  baseUrl: 'https://bstackdemo.com/',
+  baseUrl: "https://bstackdemo.com/",
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
   chromeOptions: {
     prefs: {
       "profile.default_content_setting_values.geolocation": 1,
-    }
+    },
   },
-  framework: 'mocha',
-  reporters: [['allure', {
-    outputDir: 'allure-results',
-    disableWebdriverStepsReporting: true,
-    disableWebdriverScreenshotsReporting: false,
-  }]],
+  framework: "mocha",
+  reporters: [
+    [
+      "allure",
+      {
+        outputDir: "allure-results",
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+      },
+    ],
+    [
+      "junit",
+      {
+        outputDir: "junit-results",
+        outputFileFormat: function (options) {
+          // optional
+          return `results-${options.cid}.xml`;
+        },
+      },
+    ],
+  ],
   mochaOpts: {
-    ui: 'bdd',
-    timeout: 60000
+    ui: "bdd",
+    timeout: 60000,
   },
-  beforeSession: function (config, capabilities) {
-  },
-  afterTest: function (test, context, { error, result, duration, passed, retries }) {
+  beforeSession: function (config, capabilities) {},
+  afterTest: function (
+    test,
+    context,
+    { error, result, duration, passed, retries }
+  ) {
     if (error) {
       browser.takeScreenshot();
     }
-  }
-}
+  },
+};
