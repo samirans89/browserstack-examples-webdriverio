@@ -1,27 +1,23 @@
-const Page = require('./basePage');
-/**
- * sub page containing specific selectors and methods for a specific page
- */
+const Page = require("./basePage");
+const Actions = require("../common/technical_actions");
+
 class ConfirmationPage extends Page {
-  /**
-   * define selectors using getter methods
-   */
-  get confirmationMessage() {
-    return $('#confirmation-message')
+  constructor() {
+    super();
+    this.lblConfirmationMessage = "#confirmation-message";
+    this.btnContinueShopping = "div.continueButtonContainer button";
   }
 
-  get continueShoppingButton() {
-    return $('div.continueButtonContainer button')
+  async validateOrderSuccess(orderSuccessMesage) {
+    const confirmationMessage = await Actions.getPageObject(
+      this.lblConfirmationMessage
+    );
+    await expect(confirmationMessage).toHaveText(orderSuccessMesage);
   }
 
-  clickContinueShoppingButton() {
-    this.continueShoppingButton.click();
+  async continueShopping() {
+    await Actions.performClick(this.btnContinueShopping);
   }
-
-  waitForConfirmationToBeDisplayed() {
-    this.confirmationMessage.waitForDisplayed({ timeout: 5000 });
-  }
-
 }
 
-module.exports = new ConfirmationPage();
+module.exports = ConfirmationPage;

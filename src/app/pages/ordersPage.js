@@ -1,23 +1,21 @@
 const Page = require('./basePage');
+const Actions = require("../common/technical_actions");
 
 /**
  * sub page containing specific selectors and methods for a specific page
  */
 class OrdersPage extends Page {
-  /**
-   * define selectors using getter methods
-   */
-  get allOrders() {
-    return $$('.order')
+  
+  constructor() {
+    super();
+    this.sectionOrders = '.order';
   }
 
-  get firstOrder() {
-    return $('.order')
-  }
-
-  waitforOrdersToDisplay() {
-    this.firstOrder.waitForDisplayed({ timeout: 5000 });
+  async waitforAllOrdersToDisplay() {
+    const orders = await Actions.getPageObject(this.sectionOrders, true);
+    return orders;
+    
   }
 }
 
-module.exports = new OrdersPage();
+module.exports = OrdersPage;

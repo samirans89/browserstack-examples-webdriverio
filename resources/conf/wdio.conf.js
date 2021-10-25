@@ -7,7 +7,6 @@ exports.config = {
   specs: [""],
   capabilities: [
     {
-      maxInstances: 1,
       browserName: "chrome",
       acceptInsecureCerts: true,
     },
@@ -27,19 +26,10 @@ exports.config = {
   framework: "mocha",
   reporters: [
     [
-      "allure",
-      {
-        outputDir: "allure-results",
-        disableWebdriverStepsReporting: true,
-        disableWebdriverScreenshotsReporting: false,
-      },
-    ],
-    [
       "junit",
       {
         outputDir: "junit-results",
         outputFileFormat: function (options) {
-          // optional
           return `results-${options.cid}.xml`;
         },
         errorOptions: {
@@ -54,14 +44,14 @@ exports.config = {
     ui: "bdd",
     timeout: 60000,
   },
-  beforeSession: function (config, capabilities) {},
-  afterTest: function (
+  beforeSession: async function (config, capabilities) {},
+  afterTest: async function (
     test,
     context,
     { error, result, duration, passed, retries }
   ) {
     if (error) {
-      browser.takeScreenshot();
+      await browser.takeScreenshot();
     }
   },
 };

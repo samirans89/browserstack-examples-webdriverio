@@ -18,13 +18,13 @@ steps:
 - task: BrowserStackConfig@0
   inputs:
     BrowserStackServiceEndPoint: 'BStack Demo Account'
+  displayName: 'Set BrowserStack Configuration'
 
 - script: |
     node -v
     npm install
-    npm run bstack-parallel-browsers
-    npx allure generate allure-results --clean
-  displayName: 'npm install and build'
+    npm run bstack-parallel
+  displayName: 'Test build and execute'
 
 - task: PublishTestResults@2
   inputs:
