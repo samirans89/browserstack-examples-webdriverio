@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "bstack-parallel": "npx wdio resources/conf/wdio-bstack-parallel.conf.js",
+    "bstack-parallel-suite": "npx wdio resources/conf/wdio-bstack-parallel.conf.js --suite login --suite e2e --suite offers",
     "bstack-single": "npx wdio resources/conf/wdio-bstack-single.conf.js",
     "test": "npx wdio resources/conf/wdio-on-prem.conf.js"
   },
