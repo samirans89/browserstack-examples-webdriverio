@@ -8,7 +8,7 @@ WebdriverIO is a progressive automation framework built to automate modern web a
 
 This BrowserStack Example repository demonstrates a WebdriverIO tests framework written in Mocha and nodeJS with parallel testing capabilities. The WebdriverIO test scripts are written for the open source [BrowserStack Demo web application](https://bstackdemo.com) ([Github](https://github.com/browserstack/browserstack-demo-app)). This BrowserStack Demo App is an e-commerce web application which showcases multiple real-world user scenarios. The app is bundled with offers data, orders data and products data that contains everything you need to start using the app and run tests out-of-the-box.
 
-The WebDriverIO tests are run on different platforms like on-prem, docker and BrowserStack using various run configurations and test capabilities.
+The WebDriverIO tests are run on BrowserStack using various run configurations and test capabilities.
 
 ---
 
@@ -45,145 +45,20 @@ The WebDriverIO tests are run on different platforms like on-prem, docker and Br
 
 ## Test infrastructure environments 
 
-- [On-premise/self-hosted](#on-premise--self-hosted)
-- [Docker](#docker)
 - [BrowserStack](#browserstack)
 
 
 ## Configuring the maximum parallel test threads for this repository
 
   For all the parallel run configuration profiles, you can configure the maximum parallel test threads by changing the settings below.
-
-  - Docker
-
-    `./resources/conf/wdio-docker-parallel.conf.js`
-
-    ```js
-    capabilities: [{
-    maxInstances: 5,
-    ...
-    ```
   
   - BrowserStack
     
     `./resources/conf/wdio-bstack-parallel.conf.js`
 
     ```js
-    commonCapabilities: [{
     maxInstances: 5,
-    ...
     ```
-
-## Test Reporting
-
-- [Allure reports](#generating-allure-reports)
-
----
-
-# On Premise / Self Hosted
-
-This infrastructure points to running the tests on your own machine using a browser (e.g. Chrome) using the browser's driver executables (e.g. ChromeDriver for Chrome).
-
-## Running Your Tests
-
-### Run a specific test on your own machine
-
-- How to run the test?
-
-  To run the default test scenario (e.g. End to End Scenario) on your own machine, use the following command:
-  
-  ```sh
-  npm test
-  ```
-
-  To run a specific test scenario, use the following command with the script names from package.json:
-  
-  ```sh
-  npm run <script_name>
-  ```
-  For example:
-
-  ```sh
-  npm run on-prem
-  ```
-
-  where,  the argument 'script_name' can be any WebdriverIO scenario name configured in this repository inside package.json.
-
-- Output
-
-  This run profile executes a specific test scenario on a single browser instance on your own machine.
-
-
-### Run the entire test suite on your own machine
-
-- How to run the test?
-
-  To run the entire test suite on your own machine, use the following command:
-  
-  ```sh
-  npm run on-prem-suite
-  ```
-
-- Output
-
-  This run profile executes the entire test suite sequentially on a single browser, on your own machine.
-
-### Run the entire test suite on your own machine in parallel
-
-- How to run the test?
-
-  To run the entire test suite on your own machine in parallel, use the following command:
-  
-  ```sh
-  npm run on-prem-suite-parallel
-  ```
-
-- Output
-
-  This run profile executes the entire test suite parallelly by opening multiple browser instances on your own machine.
-
----
-
-# Docker
-
-[Docker](https://docs.docker.com/get-started/overview/) is an open source platform that provides the ability to package and test applications in an isolated environment called containers.
-
-## Prerequisites
-
-- Install and start [Docker](https://docs.docker.com/get-docker/).
-- Note: Docker should be running on the test machine. Ensure Docker Compose is installed as well.
-
-## Running Your Tests
-
-### Run a specific test on the docker infrastructure
-
-- How to run the test?
-
-    - To run the default test scenario (e.g. End to End Scenario) on your own machine, use the following command:
-
-    ```sh
-    npm run docker
-    ```
-
-- Output
-
-  This run profile executes a specific test scenario on a single browser deployed on a docker image.
-
-### Run the entire test suite in parallel using Docker
-
-- How to run the test?
-
-    - To run the entire test suite in parallel on the docker image, use the following command:
-
-  ```sh
-  npm run docker-parallel
-  ```
-
-- Output
-
-  This run profile executes the entire test suite in parallel on a single browser, deployed on a docker image.
-
-- Note: By default, this execution would run maximum 5 test threads in parallel on Docker. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
 
 ---
 
@@ -278,90 +153,6 @@ In this section, we will run the tests in parallel on a single browser on Browse
 
   - Note: By default, this execution would run maximum 5 test threads in parallel on BrowserStack. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
 
-
-### Run the entire test suite in parallel on multiple BrowserStack browsers
-
-In this section, we will run the tests in parallel on multiple browsers on Browserstack. Refer to the `capabilities` object in `./resources/conf/wdio-bstack-parallel-browsers.conf.js` file to change test capabilities for this configuration.
-
-- How to run the test?
-
-  To run the entire test suite in parallel on multiple BrowserStack browsers, use the following command:
-  
-  ```sh
-  npm run bstack-parallel-browsers
-  ```
-
-### [Web application hosted on internal environment] Running your tests on BrowserStack using BrowserStackLocal
-
-#### Prerequisites
-
-- Clone the [BrowserStack demo application](https://github.com/browserstack/browserstack-demo-app) repository.
-  ```sh
-  git clone https://github.com/browserstack/browserstack-demo-app
-  ``` 
-- Please follow the README.md on the BrowserStack demo application repository to install and start the dev server on localhost.
-- In this section, we will run a single test case to test the BrowserStack Demo app hosted on your local machine i.e. localhost. Refer to the `capabilities` object in `./resources/conf/wdio-bstack-local.conf.js` file to change test capabilities for this configuration.
-- Note: You may need to provide additional BrowserStackLocal arguments to successfully connect your localhost environment with BrowserStack infrastructure. (e.g if you are behind firewalls, proxy or VPN).
-- Further details for successfully creating a BrowserStackLocal connection can be found here:
-  
-  - [Local Testing with Automate](https://www.browserstack.com/local-testing/automate)
-  - [BrowserStackLocal Java GitHub](https://github.com/browserstack/browserstack-local-java)
-
-
-### [Web application hosted on internal environment] Run a specific test on BrowserStack using BrowserStackLocal
-
-- How to run the test?
-
-  - To run the default test scenario (e.g. End to End Scenario) on a single BrowserStack browser using BrowserStackLocal, use the following command:
-
-  ```sh
-  npm run bstack-local
-  ```
-
-- Output
-
-  This run profile executes a single test on an internally hosted web application on a single browser on BrowserStack. Please refer to your BrowserStack dashboard(https://automate.browserstack.com/) for test results.
-
-
-### [Web application hosted on internal environment] Run the entire test suite in parallel on a single BrowserStack browser using BrowserStackLocal
-
-In this section, we will run the test cases to test the internally hosted website in parallel on a single browser on Browserstack. Refer to the `capabilities` object in `./resources/conf/wdio-bstack-local-parallel.conf.js` file to change test capabilities for this configuration.
-
-- How to run the test?
-
-  To run the entire test suite in parallel on a single BrowserStack browser using BrowserStackLocal, use the following command:
-
-  ```sh
-  npm run bstack-local-parallel
-  ````
-
-- Output
-
-   This run profile executes the entire test suite on an internally hosted web application on a single browser on BrowserStack. Please refer to your [BrowserStack dashboard](https://automate.browserstack.com/) for test results.
-  
-- Note: By default, this execution would run maximum 5 test threads in parallel on BrowserStack. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
-
-### [Web application hosted on internal environment] Run the entire test suite in parallel on multiple BrowserStack browser using BrowserStackLocal
-
-In this section, we will run the test cases to test the internally hosted website in parallel on multiple browsers on Browserstack. Refer to the `capabilities` object in `./resources/conf/wdio-bstack-local-parallel-browsers.conf.js` file to change test capabilities for this configuration.
-
-- How to run the test?
-
-  To run the entire test suite in parallel on a single BrowserStack browser using BrowserStackLocal, use the following command:
-
-  ```sh
-  npm run bstack-local-parallel-browsers
-  ```
-
-- Output
-
-  This run profile executes the entire test suite on an internally hosted web application on multiple browsers on BrowserStack. Please refer to your [BrowserStack dashboard](https://automate.browserstack.com/) for test results.
-
-- Note: By default, this execution would run maximum 5 test threads in parallel on BrowserStack. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
-
-## Generating Allure Reports
-
-- Generate Report using the following command: `npm run generate-report`
 
 ## Additional Resources
 

@@ -1,6 +1,5 @@
 .idea/
-node_modules/
-allure-report/
-allure-results/
+node_modules
+junit-results
 local.log
 .DS_Store

@@ -1,5 +1,5 @@
 /**
- * main page object containing all methods, selectors and functionality
+ * main page object containing all common business functions
  * that is shared across all page objects
  */
 module.exports = class Page {
@@ -7,7 +7,7 @@ module.exports = class Page {
    * Opens a sub page of the page
    * @param path path of the sub page (e.g. /path/to/page.html)
    */
-  open(path) {
-    return browser.url(`/${path}`)
+  async open(path) {
+    return await browser.url(`/${path}`)
   }
 }

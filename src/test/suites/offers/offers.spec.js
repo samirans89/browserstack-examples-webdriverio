@@ -1,28 +1,30 @@
-describe('StackDemo Offers', () => {
+const HomePage = require('../../../app/pages/homePage');
+const SignInPage = require('../../../app/pages/signInPage');
+const OffersPage = require('../../../app/pages/offersPage');
 
-  beforeEach('Open StackDemo', () => {
-    browser.url('');
-  })
+describe("StackDemo Offers", async () => {
+  before("Open StackDemo", async () => {
+    await browser.url("");
+  });
 
-  afterEach('clear sessionstorage', () => {
-    browser.execute(() => sessionStorage.clear())
-  })
+  after("clear sessionstorage", async () => {
+    await browser.execute(() => sessionStorage.clear());
+  });
 
-  it('Check offers for India', () => {
-    $('#signin').click();
-    $('#username input').setValue(browser.config.accounts[0].username + '\n');
-    $('#password input').setValue(browser.config.accounts[0].password + '\n');
-    $('#login-btn').click();
+  it("Check offers for India", async () => {
+    const homePage = new HomePage();
+    await homePage.goToSignInPage();
+    const signInPage = new SignInPage();
+    const username = await browser.config.accounts[0].username;
+    const password = await browser.config.accounts[0].password;
+    await signInPage.performLogin(username, password);
 
-    browser.execute(function() {
-      window.navigator.geolocation.getCurrentPosition = function(success) {
-        var position = { coords : { latitude: "1", longitude: "103" } }; 
-        success(position);
-      }
-    });
-    $('#offers').click();
+    const offersPage = new OffersPage();
 
-    $(".offer").waitForDisplayed({ timeout: 5000 });
-    expect($$('.offer')).toHaveLength(3);
-  })
-})
+    await offersPage.setOffersLocation(browser, "1", "103");
+
+    await homePage.goToOffersPage();
+
+    await offersPage.validateOffersCount(3);
+  });
+});
