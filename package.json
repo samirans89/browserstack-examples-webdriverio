@@ -4,17 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "bstack-local-parallel-browsers": "npx wdio resources/conf/wdio-bstack-local-parallel-browsers.conf.js",
-    "bstack-local-parallel": "npx wdio resources/conf/wdio-bstack-local-parallel.conf.js",
-    "bstack-local": "npx wdio resources/conf/wdio-bstack-local.conf.js",
-    "bstack-parallel-browsers": "npx wdio resources/conf/wdio-bstack-parallel-browsers.conf.js",
     "bstack-parallel": "npx wdio resources/conf/wdio-bstack-parallel.conf.js",
     "bstack-single": "npx wdio resources/conf/wdio-bstack-single.conf.js",
-    "docker": "npx wdio resources/conf/wdio-docker-service.conf.js",
-    "docker-parallel": "npx wdio resources/conf/wdio-docker-service-parallel.conf.js",
-    "on-prem-suite": "npx wdio resources/conf/wdio-on-prem-suite.conf.js",
-    "on-prem": "npx wdio resources/conf/wdio-on-prem.conf.js",
-    "on-prem-suite-parallel": "npx wdio resources/conf/wdio-on-prem-suite-parallel.conf.js",
     "test": "npx wdio resources/conf/wdio-on-prem.conf.js"
   },
   "keywords": [],
