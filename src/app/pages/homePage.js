@@ -1,66 +1,57 @@
-const Page = require('./basePage');
-require('./signInPage');
-let phoneName = '';
+const Page = require("./basePage");
+const Actions = require("../common/technical_actions");
 /**
  * sub page containing specific selectors and methods for a specific page
  */
 class HomePage extends Page {
-  /**
-   * define selectors using getter methods
-   */
-  get signInLink() {
-    return $('#signin')
+  constructor() {
+    super();
+    this.lnkSignIn = "#signin";
+    this.lnkOrders = "#orders";
+    this.lnkFavourites = '#favourites';
+    this.lnkOffers = '#offers';
+    this.btnBuyIPhoneXS =
+      "//p[text() = 'iPhone XS']/../div[@class = 'shelf-item__buy-btn']";
+    this.btnBuyDynamicLocator =
+      "//p[text() = '{dynamicPhoneName}']/../div[@class = 'shelf-item__buy-btn']";
+    this.btnCartClose = ".float-cart__close-btn";
+    this.btnBuy = ".buy-btn";
+    this.btnCheckout = "#checkout-shipping-continue";
+    this.bag = ".bag.bag--float-cart-closed"
   }
 
-  get ordersLink() {
-    return $('#orders')
+  async goToSignInPage() {
+    await Actions.performClick(this.lnkSignIn);
   }
 
-  get ordersLink() {
-    return $('#orders')
+  async goToOrdersPage() {
+    await Actions.performClick(this.lnkOrders);
   }
 
-  get iPhoneXSElement() {
-    return $("//p[text() = 'iPhone XS']/../div[@class = 'shelf-item__buy-btn']")
+  async goToFavouritesPage() {
+    await Actions.performClick(this.lnkFavourites);
   }
 
-  get phonesBuyButton() {
-    return $("//p[text() = '" + phoneName + "']/../div[@class = 'shelf-item__buy-btn']")
+  async goToOffersPage() {
+    await Actions.performClick(this.lnkOffers);
   }
 
-  get cartCloseButton() {
-    return $('.float-cart__close-btn')
+  async addItemsToCart(...items) {
+    for (const item of items) {
+      const phoneName = item;
+      const btnLocalLocator = this.btnBuyDynamicLocator.replace(
+        "{dynamicPhoneName}",
+        phoneName
+      );
+      await Actions.performClick(btnLocalLocator);
+      await Actions.performClick(this.btnCartClose);
+    }
   }
 
-  get buyButton() {
-    return $('.buy-btn')
-  }
-
-  navigateToSignIn() {
-    this.signInLink.click();
-  }
-
-  navigateToOrders() {
-    this.ordersLink.click();
-  }
-
-  selectPhone(phoneToSelect) {
-    phoneName = phoneToSelect;
-    this.phonesBuyButton.click();
-  }
-
-  closeCartModal() {
-    this.cartCloseButton.click();
-  }
-
-  clickBuyButton() {
-    this.buyButton.waitForClickable({ timeout: 5000 });
-    this.buyButton.click();
-  }
-
-  open() {
-    return super.open('');
+  async buyPhones() {
+    await Actions.performClick(this.bag);
+    await Actions.performClick(this.btnBuy);
   }
 }
 
-module.exports = new HomePage();
+module.exports = HomePage;

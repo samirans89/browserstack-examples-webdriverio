@@ -1,39 +1,44 @@
 const Page = require('./basePage');
+const Actions = require("../common/technical_actions");
 
-/**
- * sub page containing specific selectors and methods for a specific page
- */
 class SignInPage extends Page {
-  /**
-   * define selectors using getter methods
-   */
-  get inputUsername() {
-    return $('#username input')
+
+  constructor() {
+    super();
+    this.txtUsername = '#username input';
+    this.txtPassword = '#password input';
+    this.btnLogin = '#login-btn';
+    this.lblUsername = '.username';
+    this.lnkLogout = '#logout';
+    this.lblApiError = '.api-error';
   }
 
-  get inputPassword() {
-    return $('#password input')
+  async performLogin(username, password) {
+    await Actions.setText(this.txtUsername, username + '\n')
+    await Actions.setText(this.txtPassword, password + '\n')
+    await Actions.performClick(this.btnLogin);
   }
 
-  get btnSubmit() {
-    return $('#login-btn')
+  async performLogout() {
+    await Actions.performClick(this.lnkLogout);
   }
 
-  get signedInUsername() {
-    return $('.username')
+  async validateURL(param) {
+    const pageURL = await Actions.getPageURL();
+    return pageURL.indexOf(param) > -1
   }
 
-  login(username, password) {
-    this.inputUsername.setValue(username + '\n');
-    this.inputPassword.setValue(password + '\n');
-    this.btnSubmit.click();
+  async getLoggedInUsername() {
+    return await Actions.getPageObject(this.lblUsername);
   }
 
-  getSignedInUsername() {
-    return this.signedInUsername;
+  async validateUser(username) {
+    await expect(await this.getLoggedInUsername()).toHaveText(username);
   }
 
-
+  async validateLoginFailure(message) {
+    await expect(await (await Actions.getPageObject(this.lblApiError))).toHaveText(message);
+  }
 }
 
-module.exports = new SignInPage();
+module.exports = SignInPage;

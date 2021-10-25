@@ -1,20 +1,24 @@
+const HomePage = require('../../../app/pages/homePage');
+const SignInPage = require('../../../app/pages/signInPage');
+
 describe('StackDemo login', () => {
 
-    beforeEach('Open StackDemo', () => {
-      browser.url('');
+    before('Open StackDemo', async () => {
+      await browser.url('');
     })
 
-    afterEach('clear sessionstorage', () => {
-      browser.execute(() => sessionStorage.clear())
+    after('clear session storage', async () => {
+      await browser.execute(() => sessionStorage.clear())
     })
 
-    it(`Login sholud be successful for account with username 'existing_orders_user'`, function() {
-        $('#signin').click();
-        $('#username input').setValue(browser.config.accounts[2].username + '\n');
-        $('#password input').setValue(browser.config.accounts[2].password + '\n');
-        $('#login-btn').click();
-
-        expect($('.username')).toHaveText(browser.config.accounts[2].username);
-        $('#logout').click();
+    it(`Login should be successful for account with username 'existing_orders_user'`, async function() {
+      const homePage = new HomePage();
+      await homePage.goToSignInPage();
+      const signInPage = new SignInPage();
+      const username = await browser.config.accounts[3].username;
+      const password = await browser.config.accounts[3].password;
+      await signInPage.performLogin(username, password);
+      await signInPage.validateUser(username);
+      await signInPage.performLogout();
     });
 })

@@ -22,21 +22,39 @@ var overrides = {
     name: (require('minimist')(process.argv.slice(2)))['bstack-session-name'] || 'default_name',
     build: process.env.BROWSERSTACK_BUILD_NAME || 'browserstack-examples-webdriverio' + " - " + new Date().getTime()
   }],
-  afterTest: function (test, context, { error, result, duration, passed, retries }) {
-    if((require('minimist')(process.argv.slice(2)))['bstack-session-name']) {
-      browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" +
-        (require('minimist')(process.argv.slice(2)))['bstack-session-name'] +  "\" }}");
-    } else {
-      browser.executeScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + test.title +  "\" }}");
-    }
 
-    if(passed) {
-      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": "Assertions passed"}}');
+  before: async function (capabilities, specs, browser) {
+    global.specFilePath = await specs[0];
+  },
+  afterTest: async function (
+    test,
+    context,
+    { error, result, duration, passed, retries }
+  ) {
+    const specFileName = /[^/]*$/.exec(specFilePath)[0];
+    await (
+      await browser
+    ).executeScript(
+      'browserstack_executor: {"action": "setSessionName", "arguments": {"name":"' +
+        specFileName +
+        '" }}', []
+    );
+
+    if (passed) {
+      await (
+        await browser
+      ).executeScript(
+        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": "Assertions passed"}}', []
+      );
     } else {
-      browser.takeScreenshot();
-      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}');
+      await (await browser).takeScreenshot();
+      await (
+        await browser
+      ).executeScript(
+        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}', []
+      );
     }
-  }
+  },
 };
 
 exports.config = _.defaultsDeep(overrides, defaults.config);

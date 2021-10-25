@@ -1,19 +1,25 @@
+const HomePage = require('../../../app/pages/homePage');
+const SignInPage = require('../../../app/pages/signInPage');
+
 describe('StackDemo login', () => {
 
-  beforeEach('Open StackDemo', () => {
+  before('Open StackDemo', async () => {
     browser.url('');
   })
 
-  afterEach('clear sessionstorage', () => {
+  after('clear sessionstorage', async () => {
     browser.execute(() => sessionStorage.clear())
   })
 
-  it(`Login sholud not be successful for account with username 'locked_user'`, function() {
-      $('#signin').click();
-      $('#username input').setValue(browser.config.accounts[1].username + '\n');
-      $('#password input').setValue(browser.config.accounts[1].password + '\n');
-      $('#login-btn').click();
+  it(`Login sholud not be successful for account with username 'locked_user'`, async function() {
 
-      expect($('.api-error')).toHaveText('Your account has been locked.');
+      const homePage = new HomePage();
+      await homePage.goToSignInPage();
+      const signInPage = new SignInPage();
+      const username = await browser.config.accounts[1].username;
+      const password = await browser.config.accounts[1].password;
+      await signInPage.performLogin(username, password);
+      await signInPage.validateLoginFailure('Your account has been locked.');
+
   });
 })

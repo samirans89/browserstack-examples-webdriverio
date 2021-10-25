@@ -1,62 +1,29 @@
-const Page = require('./basePage');
-/**
- * sub page containing specific selectors and methods for a specific page
- */
+const Page = require("./basePage");
+const Actions = require("../common/technical_actions");
+
 class CheckoutPage extends Page {
-  /**
-   * define selectors using getter methods
-   */
-  get firstNameInput() {
-    return $('#firstNameInput')
+
+  constructor() {
+    super();
+    this.txtFirstName = "#firstNameInput";
+    this.txtlastName = "#lastNameInput";
+    this.txtAddressLine1 = "#addressLine1Input";
+    this.txtProvince = "#provinceInput";
+    this.txtPostCode = "#postCodeInput";
+    this.btnCheckout = "#checkout-shipping-continue";
+  }
+  
+  async addCheckoutDetails(firstName, lastName, addressLine1, province, postCode) {
+    await Actions.setText(this.txtFirstName, firstName);
+    await Actions.setText(this.txtlastName, lastName);
+    await Actions.setText(this.txtAddressLine1, addressLine1);
+    await Actions.setText(this.txtProvince, province);
+    await Actions.setText(this.txtPostCode, postCode);
   }
 
-  get lastNameInput() {
-    return $('#lastNameInput')
-  }
-
-  get addressLine1Input() {
-    return $('#addressLine1Input')
-  }
-
-  get provinceInput() {
-    return $('#provinceInput')
-  }
-
-  get postCodeInput() {
-    return $('#postCodeInput')
-  }
-
-  get checkoutShippingContinue() {
-    return $('#checkout-shipping-continue')
-  }
-
-  enterFirstName(firstName) {
-    this.firstNameInput.setValue(firstName);
-  }
-
-  enterLastName(lastName) {
-    this.lastNameInput.setValue(lastName);
-  }
-
-  enterAddressLine1(addressLine1) {
-    this.addressLine1Input.setValue(addressLine1);
-  }
-
-  enterProvince(province) {
-    this.provinceInput.setValue(province);
-  }
-
-  enterPostCode(postCode) {
-    this.postCodeInput.setValue(postCode);
-  }
-
-  clickSubmit() {
-    this.checkoutShippingContinue.click();
-  }
-
-  open() {
-    return super.open('');
+  async performCheckout() {
+    await Actions.performClick(this.btnCheckout);
   }
 }
 
-module.exports = new CheckoutPage();
+module.exports = CheckoutPage;
