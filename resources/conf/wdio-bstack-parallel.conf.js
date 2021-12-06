@@ -33,8 +33,8 @@ var overrides = {
       browser_version: "latest",
     },
     {
-      device: "Samsung Galaxy S20",
-      os_version: "10.0",
+      device: "Samsung Galaxy S9",
+      os_version: "8.0",
       real_mobile: "true",
       browserName: "Android",
     },
@@ -68,12 +68,12 @@ var overrides = {
         []
       );
     } else {
-      await browser.takeScreenshot();
-
+      browser.takeScreenshot();
+      const reason = error.toString().replace(/[^a-zA-Z0-9.]/g, " ").substring(0, 255);
       await browser.executeScript(
-        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}',
-        []
-      );
+        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "' +
+          reason +
+          '"}}', []);
     }
   },
 };
