@@ -35,12 +35,12 @@ jobs:
         build-name: "BROWSERSTACK_BUILD_NAME"
         project-name: "TEST_PROJECT_NAME"
     - name: Run test
-        id: test
-        continue-on-error: true
-        run: npm run bstack-parallel
-      - run: npm run generateMochawesome
-      - name: Archive mochawesome reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: mochawesome-report
-          path: mochawesome-report/
+      id: test
+      continue-on-error: true
+      run: npm run bstack-parallel
+    - run: npm run generateMochawesome
+    - name: Archive mochawesome reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: mochawesome-report
+        path: mochawesome-report/
