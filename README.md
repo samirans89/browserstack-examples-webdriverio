@@ -59,7 +59,7 @@ The WebDriverIO tests are run on BrowserStack using various run configurations a
 ## Test Reporting
 
 - [Mochawesome reports](#generating-mochawesome-reports)
-- [JUnit](#generating-junit-xml-files)
+- [JUnit XML](#generating-junit-xml-files)
 
 ---
 
@@ -158,7 +158,11 @@ In this section, we will run the tests in parallel on a single browser on Browse
 
 - Generate Report using the following command: `npm run generateMochawesome`
 
-## Generating JUnit Xml files
+## Generating JUnit XML files
+
+
+- JUnit XML files are generated in the junit-results directory in this repository, post test execution. This JUnit XML files can be interpreted by a CI / CD tool like Gitlab / Azure DevOps, Jenkins etc. 
+
 
 ## Additional Resources
 
