@@ -56,6 +56,11 @@ The WebDriverIO tests are run on BrowserStack using various run configurations a
     maxInstances: 5,
     ```
 
+## Test Reporting
+
+- [Mochawesome reports](#generating-mochawesome-reports)
+- [JUnit](#generating-junit-xml-files)
+
 ---
 
 # BrowserStack
@@ -149,6 +154,11 @@ In this section, we will run the tests in parallel on a single browser on Browse
 
   - Note: By default, this execution would run maximum 5 test threads in parallel on BrowserStack. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
 
+## Generating Mochawesome reports
+
+- Generate Report using the following command: `npm run generateMochawesome`
+
+## Generating JUnit Xml files
 
 ## Additional Resources
 

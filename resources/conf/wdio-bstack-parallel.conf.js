@@ -1,6 +1,8 @@
 var defaults = require("./wdio.conf.js");
 var _ = require("lodash");
 
+const buildTS = new Date().getTime();
+
 var overrides = {
   user: process.env.BROWSERSTACK_USERNAME || "BROWSERSTACK_USERNAME",
   key: process.env.BROWSERSTACK_ACCESS_KEY || "BROWSERSTACK_ACCESS_KEY",
@@ -13,37 +15,48 @@ var overrides = {
   hostname: "hub.browserstack.com",
   maxInstances: 25,
   commonCapabilities: {
-    "browserstack.debug": true,
-    "browserstack.video": true,
-    "browserstack.networkLogs": true,
-    acceptInsecureCerts: true,
-    "browserstack.maskCommands": "setValues, getValues, setCookies, getCookies",
-    name:
-      require("minimist")(process.argv.slice(2))["bstack-session-name"] ||
-      "default_name",
-    build:
-      process.env.BROWSERSTACK_BUILD_NAME ||
-      "browserstack-examples-webdriverio" + " - " + new Date().getTime(),
+    "bstack:options": {
+      projectName: "browserstack-examples-webdriverio",
+      buildName:
+        process.env.BROWSERSTACK_BUILD_NAME ||
+        "browserstack-examples-webdriverio-" + buildTS,
+      sessionName: require("minimist")(process.argv.slice(2))[
+        "bstack-session-name"
+      ],
+      debug: true,
+      video: true,
+      networkLogs: true,
+      maskCommands: "setValues, getValues, setCookies, getCookies",
+      appiumVersion: "1.21.0",
+      local: "false",
+    },
   },
   capabilities: [
     {
-      os: "OS X",
-      os_version: "Catalina",
-      browserName: "chrome",
-      browser_version: "latest",
+      "bstack:options": {
+        os: "Windows",
+        osVersion: "10",
+      },
+      browserName: "Chrome",
+      browserVersion: "latest",
     },
     {
-      device: "Samsung Galaxy S9",
-      os_version: "8.0",
-      real_mobile: "true",
-      browserName: "Android",
-    },
-    {
-      device: "iPhone 12",
-      os_version: "14",
-      real_mobile: "true",
+      "bstack:options": {
+        osVersion: "14",
+        deviceName: "iPhone 12",
+        realMobile: "true",
+      },
       browserName: "iPhone",
     },
+    {
+      'bstack:options' : {
+      "osVersion" : "9.0",
+      "deviceName" : "Google Pixel 3a XL",
+      "realMobile" : "true",
+      "local" : "false",
+      },
+      "browserName" : "Android",
+      }
   ],
 
   before: async function (capabilities, specs, browser) {
@@ -68,19 +81,24 @@ var overrides = {
         []
       );
     } else {
-      browser.takeScreenshot();
-      const reason = error.toString().replace(/[^a-zA-Z0-9.]/g, " ").substring(0, 255);
+      await browser.takeScreenshot();
+      const reason = error
+        .toString()
+        .replace(/[^a-zA-Z0-9.]/g, " ")
+        .substring(0, 255);
       await browser.executeScript(
         'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "' +
           reason +
-          '"}}', []);
+          '"}}',
+        []
+      );
     }
   },
 };
 
 exports.config = _.defaultsDeep(overrides, defaults.config);
 
+// Code to support common capabilities
 exports.config.capabilities.forEach(function (caps) {
-  for (var i in exports.config.commonCapabilities)
-    caps[i] = caps[i] || exports.config.commonCapabilities[i];
+  Object.assign(caps, exports.config.commonCapabilities);
 });

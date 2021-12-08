@@ -1,4 +1,5 @@
 var fs = require("fs");
+const mergeResults = require("wdio-mochawesome-reporter/mergeResults");
 const accounts = require("../data/user.json");
 
 exports.config = {
@@ -11,6 +12,9 @@ exports.config = {
       acceptInsecureCerts: true,
     },
   ],
+  specFileRetries: 1,
+  specFileRetriesDelay: 0,
+  specFileRetriesDeferred: false,
   logLevel: "warn",
   coloredLogs: true,
   bail: 0,
@@ -39,6 +43,15 @@ exports.config = {
         },
       },
     ],
+    [
+      "mochawesome",
+      {
+        outputDir: "./mochawesome-report",
+        outputFileFormat: function (opts) {
+          return `results-${opts.cid}.json`;
+        },
+      },
+    ],
   ],
   mochaOpts: {
     ui: "bdd",
@@ -53,5 +66,8 @@ exports.config = {
     if (error) {
       await browser.takeScreenshot();
     }
+  },
+  onComplete: async function () {
+    mergeResults("./mochawesome-report", "results-*");
   },
 };

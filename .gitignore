@@ -3,3 +3,4 @@ node_modules
 junit-results
 local.log
 .DS_Store
+mochawesome-report

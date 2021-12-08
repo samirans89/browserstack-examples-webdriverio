@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "generateMochawesome": "marge mochawesome-report/wdio-ma-merged.json --reportTitle 'WebdriverIO Boilerplate Results'",
     "bstack-parallel": "npx wdio resources/conf/wdio-bstack-parallel.conf.js",
     "bstack-parallel-suite": "npx wdio resources/conf/wdio-bstack-parallel.conf.js --suite login --suite e2e --suite offers",
     "bstack-single": "npx wdio resources/conf/wdio-bstack-single.conf.js",
@@ -23,7 +24,10 @@
     "lodash": "4.17.21",
     "wdio-chromedriver-service": "^7.2.2",
     "wdio-docker-service": "^3.1.4",
-    "webdriverio": "^7.14.1"
+    "webdriverio": "^7.14.1",
+    "mochawesome": "^6.2.2",
+    "mochawesome-report-generator": "3.1.5",
+    "wdio-mochawesome-reporter": "^4.0.0"
   },
   "dependencies": {
     "@wdio/junit-reporter": "^7.16.0"
